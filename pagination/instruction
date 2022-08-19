@@ -1,0 +1,25 @@
+#=============process 1 ==================
+    Adding below code to global/project setting file
+    REST_FRAMEWORK = {
+        'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+        'PAGE_SIZE': 5, #how many entries a page will hold
+
+    }
+    ########## then you have to user ListApiView to use this.
+
+
+# ================= in case of APIView =========================
+        1. class ListApiViewLi(APIView, PageNumberPagination):
+            page_size = 3
+            page_query_param = 'p' # by default "?page=2" works but if you want to modify user param_query_param = 'do' then it will be "?do=2"
+            page_size_query_param = 'records' # this is to dynamic page_size(uper page_size will remail as default value but if you
+            want dynamically set, then user this one) http://127.0.0.1:8000/api/pagination/list/?page=2&records=5
+
+            def get(self, request, formate=None):
+                list_li = NameAndClass.objects.all()
+                result = self.paginate_queryset(list_li, request, view=self)
+                serializer = NameClassSerializer(result, many=True)
+                return Response({'status': True, 'data': serializer.data})
+
+                #output link: http://127.0.0.1:8000/api/pagination/list/?page=2
+                BUT:::: this code is not gonna show you the pagination bar// but it will show you next a previous page
