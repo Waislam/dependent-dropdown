@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'django_filters', #
+    'django_filters',  #
     # created app
     'setting',
     'pagination',
@@ -123,7 +123,12 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # For api pgination
-# REST_FRAMEWORK = {
-#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-#     'PAGE_SIZE': 5
-# }
+
+REST_FRAMEWORK = {
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS': 'pagination.pagination.CustomPagination',
+    # 'PAGE_SIZE': 2,
+    # 'PAGE_SIZE_QUERY_PARAM': 'records',
+    # 'MAX_PAGE_SIZE': 3,
+
+}
