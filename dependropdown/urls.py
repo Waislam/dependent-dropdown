@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('setting/', include('setting.urls')),
     path('api/pagination/', include('pagination.urls')),
+    path('api/searching/', include('searching.urls')),
 ]

@@ -5,6 +5,8 @@ from .serializers import NameClassSerializer
 from .models import NameAndClass
 from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
 from .pagination import CustomPagination
+from rest_framework import mixins, generics
+from .customlistmixin import CustomListModelMixin
 # Create your views here.
 
 
@@ -20,13 +22,30 @@ from .pagination import CustomPagination
 #         return self.get_paginated_response(serializer.data)
 
 
-class ListApiViewLi(APIView, CustomPagination):
+# class ListApiViewLi(APIView, CustomPagination):
+#
+#     def get(self, request, formate=None):
+#         list_li = NameAndClass.objects.all()
+#         result = self.paginate_queryset(list_li, request, view=self)
+#         serializer = NameClassSerializer(result, many=True)
+#         return self.get_paginated_response(serializer.data)
 
-    def get(self, request, formate=None):
-        list_li = NameAndClass.objects.all()
-        result = self.paginate_queryset(list_li, request, view=self)
-        serializer = NameClassSerializer(result, many=True)
-        return self.get_paginated_response(serializer.data)
+
+class ListApiViewLi(CustomListModelMixin,
+                    mixins.CreateModelMixin,
+                    generics.GenericAPIView):
+    """used customized ListModelMixin with Customized pagination"""
+
+    queryset = NameAndClass.objects.all()
+    serializer_class = NameClassSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        """Method to create student api """
+        return self.create(request, *args, **kwargs)
+
 
 
 

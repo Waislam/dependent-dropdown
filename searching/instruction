@@ -1,0 +1,38 @@
+1.. pip install django-filter
+2.. add
+        INSTALLED_APPS = [
+    ...
+    'django_filters',
+]
+3.. from django_filters import rest_framework as filters
+
+    class ProductList(generics.ListAPIView):
+        queryset = Product.objects.all()
+        serializer_class = ProductSerializer
+        filter_backends = (filters.DjangoFilterBackend,)
+        filterset_fields = ('category', 'in_stock')/['category', 'in_stock']
+        ## we can also use ^, =, with filterset_fields value
+
+        ######## if we don't wanna use filter_backends to view then need to use
+        REST_FRAMEWORK = {
+            'DEFAULT_FILTER_BACKENDS': (
+                'django_filters.rest_framework.DjangoFilterBackend',
+                ...
+            ),
+        }
+
+
+### http://127.0.0.1:8000/api/searching/students/?class_name=class2
+
+4.. from rest_framework.filters import SearchFilter
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    search_fields = ['name', 'student_id', 'class_name', 'roll']
+    http://127.0.0.1:8000/api/searching/students/?search=class2
+
+    http://127.0.0.1:8000/api/searching/students/?search=name1&class_name=class3
+
+        ‘^’ Starts-with search.
+        ‘=’ Exact matches.
+        ‘@’ Full-text search. ( for Django’s PostgreSQL backend)
+        ‘$’ Regex search
+        search_fields = ['^name', '=student_id', '@class_name', 'roll']
